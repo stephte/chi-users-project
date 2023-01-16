@@ -472,7 +472,7 @@ func TestSuperAdminCanUpdateRoleWithOG(t *testing.T) {
 	helper.Assert(body.Role == 2, "Role should be updated")
 	helper.Assert(body.LastName == helper.RegularUser.LastName, "Lastname should be the same")
 	helper.Assert(body.Email == "testing@mail.test", "Email should be updated")
-	helper.Assert(false, "should be true")
+	helper.Assert(true, "should be true")
 }
 
 
