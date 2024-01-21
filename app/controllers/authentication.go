@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/render"
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"fmt"
 )
 
@@ -28,6 +29,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Authorization", fmt.Sprintf("Bearer: %s", tokenDTO.Token))
 	w.Header().Set("X-CSRF-Token", tokenDTO.CSRF)
+	w.Header().Set("Expires", strconv.FormatInt(maxAge, 10))
 
 	http_utils.SetAuthCookie(w, tokenDTO.Token, maxAge, false)
 
@@ -83,6 +85,7 @@ func ConfirmPasswordResetToken(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Authorization", fmt.Sprintf("Bearer: %s", tokenDTO.Token))
 	w.Header().Set("X-CSRF-Token", tokenDTO.CSRF)
+	w.Header().Set("Expires", strconv.FormatInt(maxAge, 10))
 
 	http_utils.SetAuthCookie(w, tokenDTO.Token, maxAge, true)
 
@@ -107,6 +110,7 @@ func UpdatePassword(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Authorization", fmt.Sprintf("Bearer: %s", tokenDTO.Token))
 	w.Header().Set("X-CSRF-Token", tokenDTO.CSRF)
+	w.Header().Set("Expires", strconv.FormatInt(maxAge, 10))
 
 	http_utils.DeleteAuthCookie(w, true)
 	http_utils.SetAuthCookie(w, tokenDTO.Token, maxAge, false)
