@@ -42,6 +42,20 @@ func(this UUID) String() string {
 	return uuid.UUID(this).String()
 }
 
+func(this UUID) Exists() bool {
+	return this.String() != ""
+}
+
+func Parse(uuidStr string) (UUID, error) {
+	u, err := uuid.Parse(uuidStr)
+	if err != nil {
+		return New(), err
+	}
+
+	return UUID(u), nil
+}
+
+
 func (this UUID) MarshalJSON() ([]byte, error) {
     return json.Marshal(this.String())
 }

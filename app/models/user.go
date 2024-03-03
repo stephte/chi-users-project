@@ -1,6 +1,7 @@
 package models
 
 import (
+	"chi-users-project/app/utilities/interfaceutils"
 	"chi-users-project/app/utilities/enums"
 	"chi-users-project/app/utilities/auth"
 	"chi-users-project/app/utilities"
@@ -46,7 +47,7 @@ func(this *User) BeforeCreate(tx *gorm.DB) error {
 
 
 func(this *User) BeforeUpdate(tx *gorm.DB) (err error) {
-	typ := utilities.GetType(tx.Statement.Dest)
+	typ := interfaceutils.GetType(tx.Statement.Dest)
 	
 	// normal User update is assumed to be with a map
 	if typ == "map[string]interface {}" {

@@ -1,11 +1,10 @@
 package controllers
 
 import (
-	"chi-users-project/app/utilities/http_utils"
+	"chi-users-project/app/utilities/httputils"
 	"chi-users-project/app/services/dtos"
 	"chi-users-project/app/services"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/render"
 	"encoding/json"
 	"net/http"
 )
@@ -14,18 +13,18 @@ import (
 func UsersIndex(w http.ResponseWriter, r *http.Request) {
 	paginationDTO := r.Context().Value("paginationDTO").(dtos.PaginationDTO)
 
-	path := http_utils.GetRequestPath(r)
+	path := httputils.GetRequestPath(r)
 
 	baseService := r.Context().Value("BaseService").(*services.BaseService)
 	service := services.UserService{BaseService: baseService}
 
 	result, errDTO := service.GetUsers(paginationDTO, path)
 	if errDTO.Exists() {
-		http_utils.RenderErrorJSON(w, r, errDTO)
+		httputils.RenderErrorJSON(w, errDTO)
 		return
 	}
 
-	render.JSON(w, r, result)
+	httputils.RenderJSON(w, result, 200)
 }
 
 
@@ -35,13 +34,13 @@ func FindUser(w http.ResponseWriter, r *http.Request) {
 	baseService := r.Context().Value("BaseService").(*services.BaseService)
 	service := services.UserService{BaseService: baseService}
 
-	userDTO, errDTO := service.GetUser(userIdStr)
+	userOutDTO, errDTO := service.GetUser(userIdStr)
 	if errDTO.Exists() {
-		http_utils.RenderErrorJSON(w, r, errDTO)
+		httputils.RenderErrorJSON(w, errDTO)
 		return
 	}
 
-	render.JSON(w, r, userDTO)
+	httputils.RenderJSON(w, userOutDTO, 200)
 }
 
 
@@ -49,21 +48,21 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	var dto dtos.CreateUserDTO
 	bindErr := json.NewDecoder(r.Body).Decode(&dto)
 	if bindErr != nil {
-		http_utils.RenderErrorJSON(w, r, dtos.CreateErrorDTO(bindErr, 400, false))
+		httputils.RenderErrorJSON(w, dtos.CreateErrorDTO(bindErr, 400, false))
 		return
 	}
 
 	baseService := r.Context().Value("BaseService").(*services.BaseService)
 	service := services.UserService{BaseService: baseService}
 
-	userDTO, errDTO := service.CreateUser(dto)
+	userOutDTO, errDTO := service.CreateUser(dto)
 
 	if errDTO.Exists() {
-		http_utils.RenderErrorJSON(w, r, errDTO)
+		httputils.RenderErrorJSON(w, errDTO)
 		return
 	}
 
-	render.JSON(w, r, userDTO)
+	httputils.RenderJSON(w, userOutDTO, 201)
 }
 
 
@@ -77,21 +76,21 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	var data map[string]interface{}
 	bindErr := json.NewDecoder(r.Body).Decode(&data)
 	if bindErr != nil {
-		http_utils.RenderErrorJSON(w, r, dtos.CreateErrorDTO(bindErr, 400, false))
+		httputils.RenderErrorJSON(w, dtos.CreateErrorDTO(bindErr, 400, false))
 		return
 	}
 
 	baseService := r.Context().Value("BaseService").(*services.BaseService)
 	service := services.UserService{BaseService: baseService}
 
-	userDTO, errDTO := service.UpdateUser(userIdStr, data)
+	userOutDTO, errDTO := service.UpdateUser(userIdStr, data)
 
 	if errDTO.Exists() {
-		http_utils.RenderErrorJSON(w, r, errDTO)
+		httputils.RenderErrorJSON(w, errDTO)
 		return
 	}
 
-	render.JSON(w, r, userDTO)
+	httputils.RenderJSON(w, userOutDTO, 200)
 }
 
 
@@ -99,24 +98,24 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 func UpdateUserOG(w http.ResponseWriter, r *http.Request) {
 	userIdStr := chi.URLParam(r, "userId")
 
-	var dto dtos.UserDTO
+	var dto dtos.UserInDTO
 	bindErr := json.NewDecoder(r.Body).Decode(&dto)
 	if bindErr != nil {
-		http_utils.RenderErrorJSON(w, r, dtos.CreateErrorDTO(bindErr, 400, false))
+		httputils.RenderErrorJSON(w, dtos.CreateErrorDTO(bindErr, 400, false))
 		return
 	}
 
 	baseService := r.Context().Value("BaseService").(*services.BaseService)
 	service := services.UserService{BaseService: baseService}
 
-	userDTO, errDTO := service.UpdateUserOG(userIdStr, dto)
+	userOutDTO, errDTO := service.UpdateUserOG(userIdStr, dto)
 
 	if errDTO.Exists() {
-		http_utils.RenderErrorJSON(w, r, errDTO)
+		httputils.RenderErrorJSON(w, errDTO)
 		return
 	}
 
-	render.JSON(w, r, userDTO)
+	httputils.RenderJSON(w, userOutDTO, 200)
 }
 
 
@@ -129,9 +128,9 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	errDTO := service.DeleteUser(userIdStr)
 
 	if errDTO.Exists() {
-		http_utils.RenderErrorJSON(w, r, errDTO)
+		httputils.RenderErrorJSON(w, errDTO)
 		return
 	}
 
-	render.NoContent(w, r)
+	w.WriteHeader(http.StatusNoContent)
 }

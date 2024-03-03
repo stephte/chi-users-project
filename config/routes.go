@@ -6,7 +6,6 @@ import (
 	"chi-users-project/app/controllers"
 	"chi-users-project/app/services"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/render"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 	"os/signal"
@@ -121,7 +120,6 @@ func SetupRouter(logger zerolog.Logger, db *gorm.DB, env string) Router {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
-	r.Use(render.SetContentType(render.ContentTypeJSON))
 	r.Use(middleware.Recoverer)
 
 	// defined here since it needs access to the database connection
