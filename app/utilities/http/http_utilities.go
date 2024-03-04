@@ -1,4 +1,4 @@
-package httputils
+package httpUtils
 
 import (
 	"chi-users-project/app/services/dtos"

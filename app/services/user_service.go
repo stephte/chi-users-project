@@ -1,7 +1,7 @@
 package services
 
 import (
-	"chi-users-project/app/utilities/interfaceutils"
+	intrfaceUtils "chi-users-project/app/utilities/intrface"
 	"chi-users-project/app/services/mappers"
 	"chi-users-project/app/services/emails"
 	"chi-users-project/app/utilities/enums"
@@ -90,7 +90,7 @@ func (this UserService) CreateUser(dto dtos.CreateUserDTO) (dtos.UserOutDTO, dto
 // saved via a Map thats validated
 func (this UserService) UpdateUser(userIdStr string, data map[string]interface{}) (dtos.UserOutDTO, dtos.ErrorDTO) {
 	// validate User update data
-	validatedData, dataErr := interfaceutils.ValidateMapWithStruct(data, dtos.UserInDTO{})
+	validatedData, dataErr := intrfaceUtils.ValidateMapWithStruct(data, dtos.UserInDTO{})
 	if dataErr != nil {
 		return dtos.UserOutDTO{}, dtos.CreateErrorDTO(dataErr, 0, false)
 	}

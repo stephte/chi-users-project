@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"chi-users-project/app/utilities/httputils"
+	httpUtils "chi-users-project/app/utilities/http"
 	"chi-users-project/app/services/dtos"
 	"net/http"
 	"strconv"
@@ -22,7 +22,7 @@ func GetPaginationDTO(next http.Handler) (http.Handler) {
 			page, err = strconv.Atoi(pageStr)
 			if err != nil {
 				errDTO := dtos.CreateErrorDTO(err, 400, false)
-				httputils.RenderErrorJSON(w, errDTO)
+				httpUtils.RenderErrorJSON(w, errDTO)
 				return
 			}
 		}
@@ -31,7 +31,7 @@ func GetPaginationDTO(next http.Handler) (http.Handler) {
 			limit, err = strconv.Atoi(limitStr)
 			if err != nil {
 				errDTO := dtos.CreateErrorDTO(err, 400, false)
-				httputils.RenderErrorJSON(w, errDTO)
+				httpUtils.RenderErrorJSON(w, errDTO)
 				return
 			}
 		}

@@ -1,4 +1,4 @@
-package interfaceutils
+package intrfaceUtils
 
 import(
 	"chi-users-project/app/utilities/enums"

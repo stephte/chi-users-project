@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"chi-users-project/app/utilities/httputils"
+	httpUtils "chi-users-project/app/utilities/http"
 	"chi-users-project/app/services/dtos"
 	"chi-users-project/app/services"
 	"github.com/go-chi/chi/v5"
@@ -13,18 +13,18 @@ import (
 func UsersIndex(w http.ResponseWriter, r *http.Request) {
 	paginationDTO := r.Context().Value("paginationDTO").(dtos.PaginationDTO)
 
-	path := httputils.GetRequestPath(r)
+	path := httpUtils.GetRequestPath(r)
 
 	baseService := r.Context().Value("BaseService").(*services.BaseService)
 	service := services.UserService{BaseService: baseService}
 
 	result, errDTO := service.GetUsers(paginationDTO, path)
 	if errDTO.Exists() {
-		httputils.RenderErrorJSON(w, errDTO)
+		httpUtils.RenderErrorJSON(w, errDTO)
 		return
 	}
 
-	httputils.RenderJSON(w, result, 200)
+	httpUtils.RenderJSON(w, result, 200)
 }
 
 
@@ -36,11 +36,11 @@ func FindUser(w http.ResponseWriter, r *http.Request) {
 
 	userOutDTO, errDTO := service.GetUser(userIdStr)
 	if errDTO.Exists() {
-		httputils.RenderErrorJSON(w, errDTO)
+		httpUtils.RenderErrorJSON(w, errDTO)
 		return
 	}
 
-	httputils.RenderJSON(w, userOutDTO, 200)
+	httpUtils.RenderJSON(w, userOutDTO, 200)
 }
 
 
@@ -48,7 +48,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	var dto dtos.CreateUserDTO
 	bindErr := json.NewDecoder(r.Body).Decode(&dto)
 	if bindErr != nil {
-		httputils.RenderErrorJSON(w, dtos.CreateErrorDTO(bindErr, 400, false))
+		httpUtils.RenderErrorJSON(w, dtos.CreateErrorDTO(bindErr, 400, false))
 		return
 	}
 
@@ -58,11 +58,11 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	userOutDTO, errDTO := service.CreateUser(dto)
 
 	if errDTO.Exists() {
-		httputils.RenderErrorJSON(w, errDTO)
+		httpUtils.RenderErrorJSON(w, errDTO)
 		return
 	}
 
-	httputils.RenderJSON(w, userOutDTO, 201)
+	httpUtils.RenderJSON(w, userOutDTO, 201)
 }
 
 
@@ -76,7 +76,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	var data map[string]interface{}
 	bindErr := json.NewDecoder(r.Body).Decode(&data)
 	if bindErr != nil {
-		httputils.RenderErrorJSON(w, dtos.CreateErrorDTO(bindErr, 400, false))
+		httpUtils.RenderErrorJSON(w, dtos.CreateErrorDTO(bindErr, 400, false))
 		return
 	}
 
@@ -86,11 +86,11 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	userOutDTO, errDTO := service.UpdateUser(userIdStr, data)
 
 	if errDTO.Exists() {
-		httputils.RenderErrorJSON(w, errDTO)
+		httpUtils.RenderErrorJSON(w, errDTO)
 		return
 	}
 
-	httputils.RenderJSON(w, userOutDTO, 200)
+	httpUtils.RenderJSON(w, userOutDTO, 200)
 }
 
 
@@ -101,7 +101,7 @@ func UpdateUserOG(w http.ResponseWriter, r *http.Request) {
 	var dto dtos.UserInDTO
 	bindErr := json.NewDecoder(r.Body).Decode(&dto)
 	if bindErr != nil {
-		httputils.RenderErrorJSON(w, dtos.CreateErrorDTO(bindErr, 400, false))
+		httpUtils.RenderErrorJSON(w, dtos.CreateErrorDTO(bindErr, 400, false))
 		return
 	}
 
@@ -111,11 +111,11 @@ func UpdateUserOG(w http.ResponseWriter, r *http.Request) {
 	userOutDTO, errDTO := service.UpdateUserOG(userIdStr, dto)
 
 	if errDTO.Exists() {
-		httputils.RenderErrorJSON(w, errDTO)
+		httpUtils.RenderErrorJSON(w, errDTO)
 		return
 	}
 
-	httputils.RenderJSON(w, userOutDTO, 200)
+	httpUtils.RenderJSON(w, userOutDTO, 200)
 }
 
 
@@ -128,7 +128,7 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	errDTO := service.DeleteUser(userIdStr)
 
 	if errDTO.Exists() {
-		httputils.RenderErrorJSON(w, errDTO)
+		httpUtils.RenderErrorJSON(w, errDTO)
 		return
 	}
 

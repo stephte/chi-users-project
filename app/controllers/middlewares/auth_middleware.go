@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"chi-users-project/app/utilities/httputils"
+	httpUtils "chi-users-project/app/utilities/http"
 	"chi-users-project/app/services/dtos"
 	"chi-users-project/app/services"
 	"net/http"
@@ -21,7 +21,7 @@ func ValidateJWT(next http.Handler) (http.Handler) {
 
 		ctx, errDTO := handleErrDTO(jwtValid, tokenErrDTO, r)
 		if errDTO.Exists() {
-			httputils.RenderErrorJSON(w, errDTO)
+			httpUtils.RenderErrorJSON(w, errDTO)
 			return
 		}
 
@@ -39,7 +39,7 @@ func ValidatePWResetJWT(next http.Handler) (http.Handler) {
 
 		ctx, errDTO := handleErrDTO(jwtValid, tokenErrDTO, r)
 		if errDTO.Exists() {
-			httputils.RenderErrorJSON(w, errDTO)
+			httpUtils.RenderErrorJSON(w, errDTO)
 			return
 		}
 	
@@ -86,7 +86,7 @@ func getAuthTokenAndService(r *http.Request, pwReset bool) (string, services.Aut
 
 	// if auth token not in headers, get it from cookies
 	if jwt == "" {
-		authCookie, noCookieErr := httputils.GetAuthCookie(r, pwReset)
+		authCookie, noCookieErr := httpUtils.GetAuthCookie(r, pwReset)
 		if noCookieErr == nil {
 			token = authCookie.Value
 		}
